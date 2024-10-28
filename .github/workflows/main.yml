@@ -1,0 +1,31 @@
+name: Build 
+
+on:
+  push:
+    branches:
+      - yunluo-s-oss
+  pull_request:
+    branches:
+      - yunluo-s-oss
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    container: hopez13/tc:latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@main
+        with:
+          fetch-depth: 1
+          set-safe-directory: true
+      - name: Build
+        run: bash build.sh
+      - name: Upload Image
+        uses: actions/upload-artifact@main
+        with:
+          name: boot.img
+          path: |
+              boot.img
+              out/Module.symvers
+          compression-level: 9
